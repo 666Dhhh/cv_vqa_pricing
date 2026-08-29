@@ -1,0 +1,15 @@
+﻿market:
+  S0: 100.0
+  r: 0.05
+  sigma: 0.2
+  T: 1.0
+  K: 100.0
+
+quantum:
+  num_wires: 2
+  learning_rate: 0.15
+  max_epochs: 40
+
+simulation:
+  monte_carlo_samples: 300000
+  seed: 42
