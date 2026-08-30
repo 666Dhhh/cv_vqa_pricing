@@ -39,9 +39,10 @@ st.sidebar.markdown("### 🎛️ Control Panel")
 st.sidebar.markdown("---")
 st.sidebar.header("📊 Market & Hardware Parameters")
 
-S0 = st.sidebar.slider("Asset Base Price (S0)", 50.0, 150.0, 100.0)
-sigma = st.sidebar.slider("Volatility (σ)", 0.05, 0.50, 0.20)
-r = st.sidebar.slider("Risk-free Rate (r)", 0.01, 0.10, 0.05)
+
+S0 = st.sidebar.number_input("Asset Base Price (S0)", min_value=1.0, max_value=500.0, value=100.0, step=1.0)
+sigma = st.sidebar.number_input("Volatility (σ)", min_value=0.01, max_value=2.00, value=0.20, step=0.01, format="%.2f")
+r = st.sidebar.number_input("Risk-free Rate (r)", min_value=0.0, max_value=0.50, value=0.05, step=0.005, format="%.3f")
 loss_rate = st.sidebar.slider("Hardware Photon Loss Rate", 0.0, 0.30, 0.05, step=0.05)
 
 config = {
@@ -60,11 +61,11 @@ if st.button("🚀 Run Quantum Pricing Simulation", type="primary"):
     st.markdown("### 📈 Simulation Results & Analytics")
     col1, col2, col3, col4 = st.columns(4)
     
-    
     col1.metric("⚛️ VQA Price", f"USD {res['vqa_price']:.4f}")
     col2.metric("📉 BS Price", f"USD {res['bs_price']:.4f}")
     col3.metric("🎯 Relative Error", f"{res['relative_error_pct']:.4f}%")
     col4.metric("📊 Delta (Δ)", f"{greeks['Delta']:.4f}")
 
     st.success("✨ Simulation finished successfully! Quantum state optimized.")
+
 
