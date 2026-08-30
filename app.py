@@ -223,13 +223,11 @@ else:
             "vega": vega
         }
 
-    # 为了使导出的报告内容丰富，如果在会话中缓存了上次计算的结果，可直接取用或预设默认摘要
     if 'last_engine_result' not in st.session_state:
         st.session_state.last_engine_result = "Not executed in current session yet (Default Heston-VQA baseline active)."
 
     report_timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    # 丰富并清理后的 HTML 报告模版（去除了多余的裸 $ 符号，结构专业）
     pdf_html_content = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -534,7 +532,7 @@ else:
             st.plotly_chart(fig_qec, use_container_width=True)
 
     elif "Advanced" in analysis_mode or "高级" in analysis_mode:
-        st.markdown(f'<p class="main-title">{"📐 Advanced: Manifold Pullback & PPO Dynamics" if not is_cn else "📐 高级：微分几何流形平坦化与 PPO 策略动力学"}</p>', unsafe_allow_html=True)
+        st.markdown(f'<p class="main-title">{"📐 Advanced: Manifold Pullback & PPO Dynamics" if not is_cn else "📐 高级：几何流形平坦化与 PPO 策略演化"}</p>', unsafe_allow_html=True)
         st.markdown(f'<p class="sub-title">{"Global reinforcement learning optimization trajectories and Pullback tangent manifold projections." if not is_cn else "深度强化学习 PPO 全局策略收敛轨迹及状态依赖流形的 Pullback 平坦化投影。"}</p>', unsafe_allow_html=True)
         
         col_ad1, col_ad2 = st.columns(2)
@@ -599,30 +597,39 @@ else:
         st.markdown(f'<p class="main-title">{"📚 Academic Theory & Rigorous Foundations" if not is_cn else "📚 学术理论与核心数学推导看板"}</p>', unsafe_allow_html=True)
         st.markdown(f'<p class="sub-title">{"Rigorous mathematical formulations backing the CV-VQA and error-corrected financial framework." if not is_cn else "支撑本系统连续变量变分量子定价与容错金融计算的严格数学推导与算子理论基础。"}</p>', unsafe_allow_html=True)
         
+        card_title_1 = "1. Differential Geometry Pullback Mapping & Manifold Flattening" if not is_cn else "1. 微分几何 Pullback 映射与流形平坦化"
+        card_desc_1 = "Projecting state-dependent local volatility surfaces into flat tangent spaces via diffeomorphism maps to eliminate diffusion non-homogeneity:" if not is_cn else "通过微分同胚映射将状态依赖的局部波动率表面投影至平坦切空间，消除扩散项非齐次性："
         st.markdown(f"""
         <div class="card">
-            <h4>{"1. Differential Geometry Pullback Mapping & Manifold Flattening" if not is_cn else "1. 微分几何 Pullback 映射与流形平坦化"}</h4>
-            <p>{"Projecting state-dependent local volatility surfaces into flat tangent spaces via diffeomorphism maps to eliminate diffusion non-homogeneity:" if not is_cn else "通过微分同胚映射将状态依赖的局部波动率表面投影至平坦切空间，消除扩散项非齐次性："}</p>
+            <h4>{card_title_1}</h4>
+            <p>{card_desc_1}</p>
+        </div>
         """, unsafe_allow_html=True)
         st.latex(r"x_i = \Phi_i(S_i) = \ln S_i, \quad \Sigma_{ij}(e^x, t) = \Sigma_{ij}^0 + \sum_{k=1}^{d} \gamma_{ijk} x_k")
-        st.markdown("</div>", unsafe_allow_html=True)
         
+        card_title_2 = "2. Truncated Subspace Error Bound Theorem" if not is_cn else "2. 截断误差多项式上界定理 (Truncated Subspace Error Bound)"
+        card_desc_2 = "Rigorous Hilbert-Schmidt norm upper bound of the non-Gaussian cubic phase gate in the truncated subspace:" if not is_cn else "非高斯立方阶梯相门在截断子空间中的希尔伯特-施密特模严格上界："
         st.markdown(f"""
         <div class="card">
-            <h4>{"2. Truncated Subspace Error Bound Theorem" if not is_cn else "2. 截断误差多项式上界定理 (Truncated Subspace Error Bound)"}</h4>
-            <p>{"Rigorous Hilbert-Schmidt norm upper bound of the non-Gaussian cubic phase gate " if not is_cn else "非高斯立方阶梯相门 "} \exp(i\gamma \hat{x}^3) {" in the truncated subspace " if not is_cn else " 在截断子空间 "} \mathcal{H}_{N_c} {" :" if not is_cn else " 中的希尔伯特-施密特模严格上界："}</p>
+            <h4>{card_title_2}</h4>
+            <p>{card_desc_2}</p>
+        </div>
         """, unsafe_allow_html=True)
         st.latex(r"\mathcal{E}(N_c, \gamma) \le \frac{3\sqrt{2}}{4} |\gamma|^2 N_c^{9/2} + \mathcal{O}\left(|\gamma|^3 N_c^6\right)")
-        st.markdown("</div>", unsafe_allow_html=True)
 
+        card_title_3 = "3. Non-Hermitian Financial Hamiltonian & Lindblad Dissipative Master Equation" if not is_cn else "3. 非厄米金融哈密顿量与 Lindblad 耗散主方程"
+        card_desc_3 = "Open-system Lindblad evolution operator corresponding to the Partial Integro-Differential Equation (PIDE) under the risk-neutral measure:" if not is_cn else "风险中性测度下的偏微分积分方程 (PIDE) 对应的开放系统 Lindblad 演化算子："
         st.markdown(f"""
         <div class="card">
-            <h4>{"3. Non-Hermitian Financial Hamiltonian & Lindblad Dissipative Master Equation" if not is_cn else "3. 非厄米金融哈密顿量与 Lindblad 耗散主方程"}</h4>
-            <p>{"Open-system Lindblad evolution operator corresponding to the Partial Integro-Differential Equation (PIDE) under the risk-neutral measure:" if not is_cn else "风险中性测度下的偏微分积分方程 (PIDE) 对应的开放系统 Lindblad 演化算子："}</p>
+            <h4>{card_title_3}</h4>
+            <p>{card_desc_3}</p>
+        </div>
         """, unsafe_allow_html=True)
         st.latex(r"\frac{\partial \hat{\rho}}{\partial t} = -i \left[ \hat{H}_{\text{eff}}, \hat{\rho} \right] + \sum_k \left( \hat{L}_k \hat{\rho} \hat{L}_k^\dagger - \frac{1}{2} \{ \hat{L}_k^\dagger \hat{L}_k, \hat{\rho} \} \right)")
-        st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("---")
 st.markdown("<p style='text-align: center; color: #9ca3af;'>CV-VQA Quantum Pricing Engine Ultimate Suite • Powered by PennyLane, Qiskit & Streamlit</p>", unsafe_allow_html=True)
+
+
+
 
