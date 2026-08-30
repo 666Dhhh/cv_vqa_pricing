@@ -17,9 +17,15 @@ if 'entered' not in st.session_state:
 st.markdown("""
     <style>
     .stApp {
-        background-color: #07090e;
+        background-color: #0d152b;
         color: #f3f4f6;
     }
+
+    
+[data-testid="stSidebar"], [data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label {
+    color: #f3f4f6 !important; 
+}
+
     .cover-title {
         font-size: 3.5rem;
         font-weight: 900;
@@ -267,9 +273,10 @@ else:
             with c2:
                 st.metric("🎯 Relative Error" if not is_cn else "🎯 相对误差", f"{res_h['rel_err']:.3f}%")
             with c3:
-                st.metric("📈 Delta Exposure" if not is_cn else "📈 デルタ (Delta)", f"{res_h['delta']:.4f}")
+                st.metric("📈 Delta Exposure" if not is_cn else "📈 Delta 风险暴露", f"{res_h['delta']:.4f}")
             with c4:
-                st.metric("⚡ Gamma / Vega" if not is_cn else "⚡ Gamma / Vega", f"{res_h['gamma']:.4f} / {res_h['vega']:.2f}")
+                st.metric("⚡ Gamma / Vega" if not is_cn else "⚡ Gamma / Vega 风险", f"{res_h['gamma']:.4f} / {res_h['vega']:.2f}")
+
                 
             st.markdown("---")
             fig_hl = go.Figure()
