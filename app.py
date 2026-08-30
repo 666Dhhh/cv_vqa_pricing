@@ -76,7 +76,6 @@ st.markdown("""
         background-color: #030712;
         border-right: 1px solid #1e293b;
     }
-    /* SVG 图标内联美化样式 */
     .icon-svg {
         display: inline-block;
         vertical-align: middle;
@@ -113,6 +112,7 @@ if not st.session_state.entered:
                 Integrating Phase Space Wigner Tomography, Stochastic Heston Volatility, Two-Mode Beam-Splitter Entanglement, Lindblad Open-System Noise, and QEC Threshold Analysis.
             </p>
             <br>
+        </div>
         """, unsafe_allow_html=True)
         
         cover_lang = st.radio("Select Language / 选择系统语言", ["English", "中文 (Chinese)"], horizontal=True)
@@ -121,14 +121,13 @@ if not st.session_state.entered:
         if st.button("🚀 Initialize & Launch Suite / 启动旗舰计算平台", use_container_width=True, type="primary"):
             st.session_state.entered = True
             st.rerun()
-            
-        st.markdown("</div>", unsafe_allow_html=True)
 
 
 else:
+    # 修复了此处双引号包裹导致的语法错误 (改用三引号包裹)
     st.sidebar.markdown("""
         ### <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> Global Localization / 语言设置
-    """, unsafe_allow_html=True)
+    """)
     current_lang = st.sidebar.selectbox(
         "Language", 
         ["English", "中文 (Chinese)"], 
@@ -137,7 +136,10 @@ else:
     is_cn = (current_lang == "中文 (Chinese)")
     
     st.sidebar.markdown("---")
-    st.sidebar.markdown("### <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> " + ("Architecture Modules / 模块导航" if not is_cn else "旗舰科研模块矩阵"), unsafe_allow_html=True)
+    module_title_text = "Architecture Modules / 模块导航" if not is_cn else "旗舰科研模块矩阵"
+    st.sidebar.markdown(f"""
+        ### <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> {module_title_text}
+    """)
     
     nav_options = [
         "🌌 Phase 1: Wigner Phase Space Tomography" if not is_cn else "🌌 阶段 1：相空间高斯态与 Wigner 分布",
@@ -152,7 +154,10 @@ else:
     analysis_mode = st.sidebar.selectbox("Select Research Module", nav_options)
     
     st.sidebar.markdown("---")
-    st.sidebar.markdown("### <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> " + ("Global Macro Parameters" if not is_cn else "全球宏观市场参数配置"), unsafe_allow_html=True)
+    macro_title_text = "Global Macro Parameters" if not is_cn else "全球宏观市场参数配置"
+    st.sidebar.markdown(f"""
+        ### <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> {macro_title_text}
+    """)
 
     S0 = st.sidebar.number_input("Asset Base Price ($S_0$)" if not is_cn else "资产基础价格 ($S_0$)", min_value=1.0, max_value=500.0, value=100.0, step=1.0)
     K = st.sidebar.number_input("Strike / Basket Base ($K$)" if not is_cn else "行权价 / 篮子基准 ($K$)", min_value=1.0, max_value=500.0, value=100.0, step=1.0)
@@ -165,7 +170,6 @@ else:
 
     
     def run_phase2_heston(s0, k, r, v0, kappa, theta, sigma_v, rho_v, t, loss_rate):
-        
         effective_sigma = np.sqrt(max(v0, 0.01))
         target_drift = (r - 0.5 * effective_sigma**2) * t
         target_vol = effective_sigma * np.sqrt(t)
@@ -186,7 +190,6 @@ else:
         d1 = (np.log(s0 / k) + (r + 0.5 * effective_sigma**2) * t) / (effective_sigma * np.sqrt(t))
         d2 = d1 - effective_sigma * np.sqrt(t)
         bs_price = float(s0 * norm.cdf(d1) - k * np.exp(-r * t) * norm.cdf(d2))
-        
         
         delta = float(norm.cdf(d1))
         gamma = float(norm.pdf(d1) / (s0 * effective_sigma * np.sqrt(t)))
@@ -403,7 +406,6 @@ else:
             target_depth = st.slider("Quantum Circuit Depth ($D$)" if not is_cn else "量子线路门深度 ($D$)", 50, 1000, 300, 50)
             st.markdown("</div>", unsafe_allow_html=True)
             
-            
             threshold = 0.01
             logical_err = target_depth * (p_phys / threshold)**2
             est_physical_qubits = int(target_depth * 15 * max(1.0, p_phys / 0.005))
@@ -413,12 +415,10 @@ else:
             
         with col_q2:
             distances = np.array([3, 5, 7, 9, 11])
-            
             p_test_arr = np.linspace(0.001, 0.012, 50)
             
             fig_qec = go.Figure()
             for d in [3, 7, 11]:
-               
                 p_l_curve = 0.1 * (p_test_arr / 0.008)**((d + 1) / 2)
                 fig_qec.add_trace(go.Scatter(x=p_test_arr*100, y=p_l_curve, mode='lines', name=f'Surface Code Distance d={d}', line=dict(width=2.5)))
                 
@@ -531,4 +531,4 @@ else:
 st.markdown("---")
 st.markdown("<p style='text-align: center; color: #9ca3af;'>CV-VQA Quantum Pricing Engine Ultimate Suite • Powered by PennyLane, Qiskit & Streamlit</p>", unsafe_allow_html=True)
 
-    
+
