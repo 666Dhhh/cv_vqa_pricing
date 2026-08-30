@@ -2,6 +2,7 @@ import streamlit as st
 import plotly.graph_objects as go
 import numpy as np
 from scipy.stats import norm
+import datetime
 
 st.set_page_config(
     page_title="CV-VQA Quantum Pricing Engine Ultimate Suite", 
@@ -32,12 +33,12 @@ st.markdown("""
         color: #e6ebf5 !important; 
     }
 
-    /* 专门调亮 Slider 下面的数字（最小值、最大值、当前数值和刻度） */
+    /* Slider 下面的数字（最小值、最大值、当前数值和刻度）统一修改为 #9fadc9 */
     [data-testid="stSlider"] [data-baseweb="slider"] div,
     [data-testid="stSlider"] span[data-baseweb="tag"],
     [data-testid="stSlider"] div[class*="tick"],
     div[data-baseweb="slider"] div {
-        color: #7a8599 !important;
+        color: #9fadc9 !important;
     }
 
     .cover-title {
@@ -174,6 +175,40 @@ else:
     r = st.sidebar.number_input("Risk-free Interest Rate ($r$)" if not is_cn else "无风险利率 ($r$)", min_value=0.0, max_value=0.50, value=0.05, step=0.005, format="%.3f")
     T = st.sidebar.number_input("Time to Maturity ($T$ / Years)" if not is_cn else "到期时间 ($T$ / 年)", min_value=0.1, max_value=5.0, value=1.0, step=0.1)
 
+    # --- 新增：侧边栏一键报告导出区 ---
+    st.sidebar.markdown("---")
+    st.sidebar.markdown(f"📥 **{'Export Executive Report' if not is_cn else '一键导出专属分析报告'}**")
+    
+    report_timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    report_content = f"""==================================================
+CV-VQA QUANTUM PRICING ENGINE - EXECUTIVE REPORT
+Generated Timestamp: {report_timestamp}
+System Language: {current_lang}
+Current Active Module: {analysis_mode}
+==================================================
+
+[GLOBAL MACRO PARAMETERS]
+- Asset Base Price (S0): {S0}
+- Strike / Basket Base (K): {K}
+- Risk-free Interest Rate (r): {r}
+- Time to Maturity (T): {T} Years
+
+[SYSTEM ENGINE CONFIGURATION]
+- Platform Architecture: Enterprise Continuous-Variable Quantum Computing & Dissipative Simulation Platform
+- Core Subroutines: Phase Space Tomography, Stochastic Heston VQA, Two-Mode Entangled Beam-Splitter, Lindblad Open-System Noise, Surface Code QEC Threshold.
+
+==================================================
+Report verified by CV-VQA Quantum Computing Core.
+==================================================
+"""
+    st.sidebar.download_button(
+        label="📄 Download Report (.txt)" if not is_cn else "📄 下载专属文本报告 (.txt)",
+        data=report_content,
+        file_name=f"CV_VQA_Report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
+        mime="text/plain",
+        use_container_width=True
+    )
+
     if st.sidebar.button("🏠 Return to Landing Cover / 返回封面"):
         st.session_state.entered = False
         st.rerun()
@@ -244,7 +279,10 @@ else:
             
             fig_w = go.Figure(data=[go.Surface(z=W, x=X, y=P, colorscale='Turbo')])
             fig_w.update_layout(
-                title="Wigner Quasi-Probability Distribution W(x,p)" if not is_cn else "三维 Wigner 准几率分布层析",
+                title=dict(
+                    text="Wigner Quasi-Probability Distribution W(x,p)" if not is_cn else "三维 Wigner 准几率分布层析",
+                    font=dict(color="#9fadc9")
+                ),
                 template="plotly_dark",
                 paper_bgcolor="#0f172a",
                 plot_bgcolor="#0f172a",
@@ -287,7 +325,10 @@ else:
             fig_hl = go.Figure()
             fig_hl.add_trace(go.Scatter(y=res_h['loss_history'], mode='lines+markers', line=dict(color='#38bdf8', width=3), name='Convergence Loss'))
             fig_hl.update_layout(
-                title="Heston-VQA Training Loss Convergence" if not is_cn else "Heston-VQA 训练损失收敛轨迹",
+                title=dict(
+                    text="Heston-VQA Training Loss Convergence" if not is_cn else "Heston-VQA 训练损失收敛轨迹",
+                    font=dict(color="#9fadc9")
+                ),
                 xaxis_title="Epoch" if not is_cn else "迭代轮次",
                 yaxis_title="MSE Loss" if not is_cn else "损失值",
                 template="plotly_dark",
@@ -337,7 +378,10 @@ else:
             ])
             fig_b.update_layout(
                 barmode='group',
-                title="Multi-Asset Basket Pricing Comparison" if not is_cn else "多资产篮子期权定价对比",
+                title=dict(
+                    text="Multi-Asset Basket Pricing Comparison" if not is_cn else "多资产篮子期权定价对比",
+                    font=dict(color="#9fadc9")
+                ),
                 template="plotly_dark",
                 paper_bgcolor="#0f172a",
                 plot_bgcolor="#0f172a",
@@ -361,7 +405,10 @@ else:
                 fig_lp = go.Figure()
                 fig_lp.add_trace(go.Scatter(x=[g*100 for g in gamma_list], y=prices_l, mode='lines+markers', line=dict(color='#f43f5e', width=3), name='Decay Price'))
                 fig_lp.update_layout(
-                    title="Option Price vs. Photon Loss (%)" if not is_cn else "光子损耗率与期权定价衰减",
+                    title=dict(
+                        text="Option Price vs. Photon Loss (%)" if not is_cn else "光子损耗率与期权定价衰减",
+                        font=dict(color="#9fadc9")
+                    ),
                     xaxis_title="Loss Rate (%)" if not is_cn else "损耗率 (%)",
                     yaxis_title="Price ($)" if not is_cn else "期权价格 ($)",
                     template="plotly_dark",
@@ -376,7 +423,10 @@ else:
                 fig_le = go.Figure()
                 fig_le.add_trace(go.Bar(x=[f"{int(g*100)}%" for g in gamma_list], y=errs_l, marker_color='#38bdf8'))
                 fig_le.update_layout(
-                    title="Pricing Deviation (%)" if not is_cn else "定价绝对偏差百分比 (%)",
+                    title=dict(
+                        text="Pricing Deviation (%)" if not is_cn else "定价绝对偏差百分比 (%)",
+                        font=dict(color="#9fadc9")
+                    ),
                     xaxis_title="Dissipation Rate" if not is_cn else "耗散率",
                     yaxis_title="Error (%)" if not is_cn else "偏差 (%)",
                     template="plotly_dark",
@@ -419,7 +469,10 @@ else:
                 
             fig_qec.add_vline(x=0.8, line_dash="dash", annotation_text="Fault-Tolerant Threshold (~0.8%)", annotation_font_color="white")
             fig_qec.update_layout(
-                title="Logical vs. Physical Error Rates Across Code Distances" if not is_cn else "不同码距下物理与逻辑错误率相变曲线",
+                title=dict(
+                    text="Logical vs. Physical Error Rates Across Code Distances" if not is_cn else "不同码距下物理与逻辑错误率相变曲线",
+                    font=dict(color="#9fadc9")
+                ),
                 xaxis_title="Physical Error Rate (%)" if not is_cn else "物理错误率 (%)",
                 yaxis_title="Logical Error Rate ($p_L$)" if not is_cn else "逻辑错误率",
                 template="plotly_dark",
@@ -450,7 +503,10 @@ else:
             
             fig_m = go.Figure(data=[go.Surface(z=W_z, x=U, y=V, colorscale='Sunset')])
             fig_m.update_layout(
-                title="Tangent Bundle Projection",
+                title=dict(
+                    text="Tangent Bundle Projection",
+                    font=dict(color="#9fadc9")
+                ),
                 template="plotly_dark",
                 paper_bgcolor="#0f172a",
                 plot_bgcolor="#0f172a",
@@ -474,7 +530,10 @@ else:
             fig_ppo = go.Figure()
             fig_ppo.add_trace(go.Scatter(x=episodes, y=rewards, mode='lines+markers', line=dict(color='#38bdf8', width=3), name='PPO Reward'))
             fig_ppo.update_layout(
-                title="PPO Surrogate Reward Convergence",
+                title=dict(
+                    text="PPO Surrogate Reward Convergence",
+                    font=dict(color="#9fadc9")
+                ),
                 xaxis_title="Training Episode",
                 yaxis_title="Expected Objective Return",
                 template="plotly_dark",
@@ -516,7 +575,4 @@ else:
 
 st.markdown("---")
 st.markdown("<p style='text-align: center; color: #9ca3af;'>CV-VQA Quantum Pricing Engine Ultimate Suite • Powered by PennyLane, Qiskit & Streamlit</p>", unsafe_allow_html=True)
-
-
-
 
