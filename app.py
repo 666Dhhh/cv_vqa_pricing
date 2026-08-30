@@ -76,12 +76,6 @@ st.markdown("""
         background-color: #030712;
         border-right: 1px solid #1e293b;
     }
-    .icon-svg {
-        display: inline-block;
-        vertical-align: middle;
-        margin-right: 8px;
-        fill: currentColor;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -89,12 +83,6 @@ st.markdown("""
 if not st.session_state.entered:
     st.markdown("""
         <p class="cover-title">
-            <svg class="icon-svg" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="url(#grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <defs><linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff4b4b"/><stop offset="100%" stop-color="#00f2fe"/></linearGradient></defs>
-                <circle cx="12" cy="12" r="3"></circle>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                <path d="M2 12h20"></path>
-            </svg>
             CV-VQA Quantum Pricing Ultimate Suite
         </p>
     """, unsafe_allow_html=True)
@@ -104,8 +92,7 @@ if not st.session_state.entered:
     with col_c2:
         st.markdown("""
         <div class="cover-card">
-            <h3 style="color: #f8fafc; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <h3 style="color: #f8fafc; margin-bottom: 15px;">
                 Next-Gen Quantum Financial Simulation
             </h3>
             <p style="color: #94a3b8; line-height: 1.7; font-size: 0.95rem;">
@@ -124,22 +111,27 @@ if not st.session_state.entered:
 
 
 else:
-    # 修复了此处双引号包裹导致的语法错误 (改用三引号包裹)
-    st.sidebar.markdown("""
-        ### <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> Global Localization / 语言设置
-    """)
+    # 语言选择（带有 SVG 图标，并加上 unsafe_allow_html=True 确保正常渲染）
+    st.sidebar.markdown(
+        """<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> <b>Global Localization / 语言设置</b>""", 
+        unsafe_allow_html=True
+    )
     current_lang = st.sidebar.selectbox(
         "Language", 
         ["English", "中文 (Chinese)"], 
-        index=0 if st.session_state.get('cover_lang', 'English') == 'English' else 1
+        index=0 if st.session_state.get('cover_lang', 'English') == 'English' else 1,
+        label_visibility="collapsed"
     )
     is_cn = (current_lang == "中文 (Chinese)")
     
     st.sidebar.markdown("---")
-    module_title_text = "Architecture Modules / 模块导航" if not is_cn else "旗舰科研模块矩阵"
-    st.sidebar.markdown(f"""
-        ### <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> {module_title_text}
-    """)
+    module_title_text = "Architecture Modules" if not is_cn else "旗舰科研模块矩阵"
+    
+    # 模块导航标题（带有 SVG 图标）
+    st.sidebar.markdown(
+        f"""<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg> <b>{module_title_text}</b>""", 
+        unsafe_allow_html=True
+    )
     
     nav_options = [
         "🌌 Phase 1: Wigner Phase Space Tomography" if not is_cn else "🌌 阶段 1：相空间高斯态与 Wigner 分布",
@@ -151,13 +143,16 @@ else:
         "📚 Academic Theory & Rigorous Foundations" if not is_cn else "📚 学术理论与核心数学推导看板"
     ]
     
-    analysis_mode = st.sidebar.selectbox("Select Research Module", nav_options)
+    analysis_mode = st.sidebar.selectbox("Select Research Module", nav_options, label_visibility="collapsed")
     
     st.sidebar.markdown("---")
     macro_title_text = "Global Macro Parameters" if not is_cn else "全球宏观市场参数配置"
-    st.sidebar.markdown(f"""
-        ### <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> {macro_title_text}
-    """)
+    
+    # 宏观参数标题（带有 SVG 图标）
+    st.sidebar.markdown(
+        f"""<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> <b>{macro_title_text}</b>""", 
+        unsafe_allow_html=True
+    )
 
     S0 = st.sidebar.number_input("Asset Base Price ($S_0$)" if not is_cn else "资产基础价格 ($S_0$)", min_value=1.0, max_value=500.0, value=100.0, step=1.0)
     K = st.sidebar.number_input("Strike / Basket Base ($K$)" if not is_cn else "行权价 / 篮子基准 ($K$)", min_value=1.0, max_value=500.0, value=100.0, step=1.0)
@@ -214,10 +209,7 @@ else:
         with col_w1:
             st.markdown("""
             <div class="card">
-                <h4>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.69 0 1.32.35 1.7.92.38.57.44 1.28.16 1.91z"></path></svg>
-                    Squeezing Parameters
-                </h4>
+                <h4>Squeezing Parameters</h4>
             """, unsafe_allow_html=True)
             sq_r = st.slider("Squeezing Amplitude ($r$)" if not is_cn else "压缩参数 ($r$)", 0.0, 2.0, 0.75, 0.05)
             cubic_gamma = st.slider("Cubic Phase Gate ($\gamma$)" if not is_cn else "立方相位门强度 ($\gamma$)", 0.0, 0.5, 0.15, 0.02)
@@ -225,10 +217,7 @@ else:
             
             st.markdown("""
             <div class="card">
-                <h4>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                    Phase Quadrature Specs
-                </h4>
+                <h4>Phase Quadrature Specs</h4>
                 <p><b>Wigner Negativity:</b> High non-Gaussianity yields negative quasi-probability volumes, powering quantum computational advantage.</p>
             </div>
             """, unsafe_allow_html=True)
@@ -397,10 +386,7 @@ else:
         with col_q1:
             st.markdown("""
             <div class="card">
-                <h4>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                    Surface Code Parameters
-                </h4>
+                <h4>Surface Code Parameters</h4>
             """, unsafe_allow_html=True)
             p_phys = st.slider("Physical Error Rate ($p_{phys}$)" if not is_cn else "物理错误率 ($p_{phys}$)", 0.001, 0.015, 0.005, 0.001, format="%.3f")
             target_depth = st.slider("Quantum Circuit Depth ($D$)" if not is_cn else "量子线路门深度 ($D$)", 50, 1000, 300, 50)
@@ -444,10 +430,7 @@ else:
         with col_ad1:
             st.markdown("""
             <div class="card">
-                <h4>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                    Manifold Pullback Flattening
-                </h4>
+                <h4>Manifold Pullback Flattening</h4>
                 <p><b>Curvature Reduction:</b> Mapping non-Euclidean volatility surfaces into tangent vector bundles to avoid barren plateaus in deep CV circuits.</p>
             </div>
             """, unsafe_allow_html=True)
@@ -472,10 +455,7 @@ else:
         with col_ad2:
             st.markdown("""
             <div class="card">
-                <h4>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
-                    PPO Global Policy Convergence
-                </h4>
+                <h4>PPO Global Policy Convergence</h4>
                 <p><b>Surrogate Objective Optimization:</b> Stabilizing parameter updates via clipped probability ratios in continuous quantum state spaces.</p>
             </div>
             """, unsafe_allow_html=True)
