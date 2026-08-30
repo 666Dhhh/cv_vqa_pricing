@@ -1,4 +1,4 @@
-﻿import pennylane as qml
+import pennylane as qml
 from pennylane import numpy as np
 from scipy.stats import norm
 
@@ -28,14 +28,9 @@ dev = qml.device("default.gaussian", wires=2)
 
 def build_circuit(params):
     # params: [alpha1, alpha2, r1, r2, theta, phi]
-    # 1. 初始单模挤压 (编码各自波动率/方差)
     qml.Squeezing(params[2], 0.0, wires=0)
     qml.Squeezing(params[3], 0.0, wires=1)
-    
-    # 2. 分束器 (Beam Splitter) 引入两模量子纠缠混叠 (编码相关性)
     qml.Beamsplitter(params[4], params[5], wires=[0, 1])
-    
-    # 3. 位移算子 (编码对数均值 alpha1, alpha2)
     qml.Displacement(params[0], 0.0, wires=0)
     qml.Displacement(params[1], 0.0, wires=1)
 
@@ -59,14 +54,9 @@ def qnode_mode1_var(params):
     build_circuit(params)
     return qml.var(qml.QuadX(1))
 
-# ==========================================
-# 3. 定义损失函数与优化 (继承 GD 优化器)
-# ==========================================
 def cost_fn(params):
-    # QuadX 测量值需要除以 2.0 进行物理归一化 (期望除以 2，方差除以 4)
     q_mu1 = qnode_mode0_mean(params) / 2.0
     q_mu2 = qnode_mode1_mean(params) / 2.0
-    
     loss_mu = (q_mu1 - target_mu1)**2 + (q_mu2 - target_mu2)**2
     return loss_mu
 
@@ -75,8 +65,6 @@ def run_phase4():
     print("CV-VQA Quantum Option Pricing - Phase 4: Coupled Multi-Asset & Entanglement")
     print("=" * 65)
 
-    # 初始化参数: [alpha1, alpha2, r1, r2, theta, phi]
-    # alpha 设初值，r_squeeze 匹配波动率, theta 设置初始混叠角
     init_r1 = target_var1 / 2.0
     init_r2 = target_var2 / 2.0
     init_theta = np.arcsin(np.sqrt(rho))
@@ -98,9 +86,7 @@ def run_phase4():
     opt_var1 = qnode_mode0_var(params) / 4.0
     opt_var2 = qnode_mode1_var(params) / 4.0
 
-    # ==========================================
     # 4. 2D 纠缠篮子期权 Monte Carlo Pricing
-    # ==========================================
     num_samples = 500000
     np.random.seed(42)
 
@@ -137,10 +123,11 @@ def run_phase4():
     print(f"• 资产1 量子测量方差 Var1:   {opt_var1:.6f} (目标: {target_var1:.6f})")
     print(f"• 资产2 量子测量方差 Var2:   {opt_var2:.6f} (目标: {target_var2:.6f})")
     print(f"• 相关系数 Correlation rho:  {rho:.2f}")
-    print(f"• CV-VQA 纠缠态篮子期权价格:  ")
-    print(f"• 经典基准篮子期权价格:        ")
+    print(f"• CV-VQA 纠缠态篮子期权价格:   ${quantum_basket_option_price:.4f}")
+    print(f"• 经典基准篮子期权价格:       ${classical_basket_option_price:.4f}")
     print(f"• 期权定价相对误差:            {rel_err:.4f}%")
     print("=" * 65)
 
 if __name__ == "__main__":
     run_phase4()
+
