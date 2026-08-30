@@ -3,7 +3,6 @@ import plotly.graph_objects as go
 import numpy as np
 from scipy.stats import norm
 
-
 st.set_page_config(
     page_title="CV-VQA Quantum Pricing Engine Ultimate Suite", 
     page_icon="⚛️", 
@@ -13,26 +12,33 @@ st.set_page_config(
 if 'entered' not in st.session_state:
     st.session_state.entered = False
 
-
 st.markdown("""
     <style>
     .stApp {
         background-color: #0d152b;
         color: #f3f4f6;
     }
-
     
-[data-testid="stSidebar"], [data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label {
-    color: #f3f4f6 !important; 
-}
+    /* 侧边栏整体文字颜色 */
+    [data-testid="stSidebar"], [data-testid="stSidebar"] p, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label {
+        color: #f3f4f6 !important; 
+    }
 
+    /* Radio 和 Slider 的标题与标签 */
+    [data-testid="stRadio"] label p, 
+    [data-testid="stSlider"] label p,
+    [data-testid="stRadio"] span,
+    [data-testid="stSlider"] span {
+        color: #e6ebf5 !important; 
+    }
 
-[data-testid="stRadio"] label p, 
-[data-testid="stSlider"] label p,
-[data-testid="stRadio"] span,
-[data-testid="stSlider"] span {
-    color: #e6ebf5 !important; 
-}
+    /* 专门调亮 Slider 下面的数字（最小值、最大值、当前数值和刻度） */
+    [data-testid="stSlider"] [data-baseweb="slider"] div,
+    [data-testid="stSlider"] span[data-baseweb="tag"],
+    [data-testid="stSlider"] div[class*="tick"],
+    div[data-baseweb="slider"] div {
+        color: #7a8599 !important;
+    }
 
     .cover-title {
         font-size: 3.5rem;
@@ -93,7 +99,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-
 if not st.session_state.entered:
     st.markdown("""
         <p class="cover-title">
@@ -123,9 +128,7 @@ if not st.session_state.entered:
             st.session_state.entered = True
             st.rerun()
 
-
 else:
-    # 语言选择（带有 SVG 图标，并加上 unsafe_allow_html=True 确保正常渲染）
     st.sidebar.markdown(
         """<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> <b>Global Localization / 语言设置</b>""", 
         unsafe_allow_html=True
@@ -141,7 +144,6 @@ else:
     st.sidebar.markdown("---")
     module_title_text = "Architecture Modules" if not is_cn else "旗舰科研模块矩阵"
     
-    # 模块导航标题（带有 SVG 图标）
     st.sidebar.markdown(
         f"""<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg> <b>{module_title_text}</b>""", 
         unsafe_allow_html=True
@@ -162,7 +164,6 @@ else:
     st.sidebar.markdown("---")
     macro_title_text = "Global Macro Parameters" if not is_cn else "全球宏观市场参数配置"
     
-    # 宏观参数标题（带有 SVG 图标）
     st.sidebar.markdown(
         f"""<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 6px;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> <b>{macro_title_text}</b>""", 
         unsafe_allow_html=True
@@ -177,7 +178,6 @@ else:
         st.session_state.entered = False
         st.rerun()
 
-    
     def run_phase2_heston(s0, k, r, v0, kappa, theta, sigma_v, rho_v, t, loss_rate):
         effective_sigma = np.sqrt(max(v0, 0.01))
         target_drift = (r - 0.5 * effective_sigma**2) * t
@@ -214,7 +214,6 @@ else:
             "vega": vega
         }
 
-    
     if "Phase 1" in analysis_mode or "阶段 1" in analysis_mode:
         st.markdown(f'<p class="main-title">{"🌌 Phase 1: Wigner Phase Space Tomography" if not is_cn else "🌌 阶段 1：相空间高斯态与 Wigner 准几率分布"}</p>', unsafe_allow_html=True)
         st.markdown(f'<p class="sub-title">{"Visualizing continuous-variable quadratures and non-Gaussian cubic phase distortions." if not is_cn else "利用正交分量算符对连续变量光场及非高斯压缩态进行三维 Wigner 函数层析成像。"}</p>', unsafe_allow_html=True)
@@ -245,7 +244,7 @@ else:
             
             fig_w = go.Figure(data=[go.Surface(z=W, x=X, y=P, colorscale='Turbo')])
             fig_w.update_layout(
-                title="Wigner Quasi-Probability Distribution $W(x,p)$" if not is_cn else "三维 Wigner 准几率分布层析",
+                title="Wigner Quasi-Probability Distribution W(x,p)" if not is_cn else "三维 Wigner 准几率分布层析",
                 template="plotly_dark",
                 paper_bgcolor="#0f172a",
                 plot_bgcolor="#0f172a",
@@ -255,7 +254,6 @@ else:
             )
             st.plotly_chart(fig_w, use_container_width=True)
 
-  
     elif "Phase 2" in analysis_mode or "阶段 2" in analysis_mode:
         st.markdown(f'<p class="main-title">{"📊 Phase 2: Stochastic Heston-VQA & Greeks" if not is_cn else "📊 阶段 2：随机波动率 Heston-VQA 与希腊风险字母"}</p>', unsafe_allow_html=True)
         st.markdown(f'<p class="sub-title">{"CV quantum circuit optimization coupled with stochastic volatility and automated Greeks computation." if not is_cn else "在随机波动率 Heston 模型下训练变分量子线路，并精准提取 Delta, Gamma, Vega 风险暴露指标。"}</p>', unsafe_allow_html=True)
@@ -285,7 +283,6 @@ else:
             with c4:
                 st.metric("⚡ Gamma / Vega" if not is_cn else "⚡ Gamma / Vega 风险", f"{res_h['gamma']:.4f} / {res_h['vega']:.2f}")
 
-                
             st.markdown("---")
             fig_hl = go.Figure()
             fig_hl.add_trace(go.Scatter(y=res_h['loss_history'], mode='lines+markers', line=dict(color='#38bdf8', width=3), name='Convergence Loss'))
@@ -301,7 +298,6 @@ else:
             )
             st.plotly_chart(fig_hl, use_container_width=True)
 
-  
     elif "Phase 3 & 4" in analysis_mode or "阶段 3 & 4" in analysis_mode:
         st.markdown(f'<p class="main-title">{"🔗 Phase 3 & 4: Multi-Mode Entangled Basket Pricing" if not is_cn else "🔗 阶段 3 & 4：多模纠缠篮子期权定价矩阵"}</p>', unsafe_allow_html=True)
         st.markdown(f'<p class="sub-title">{"Multi-asset covariance decoupling via continuous-variable beam-splitter networks." if not is_cn else "通过多模分束器与压缩算子网络实现高维资产协方差矩阵的量子解耦与篮子定价。"}</p>', unsafe_allow_html=True)
@@ -350,7 +346,6 @@ else:
             )
             st.plotly_chart(fig_b, use_container_width=True)
 
-   
     elif "Phase 5" in analysis_mode or "阶段 5" in analysis_mode:
         st.markdown(f'<p class="main-title">{"🛡️ Phase 5: Lindblad Dissipative Noise Scans" if not is_cn else "🛡️ 阶段 5：Lindblad 开放系统损耗与鲁棒性分析"}</p>', unsafe_allow_html=True)
         st.markdown(f'<p class="sub-title">{"Simulating open-system master equations under thermal photon leakage and phase damping." if not is_cn else "在光子泄露与相位阻尼等 Lindblad 主方程耗散环境下，全面评估期权定价的容错稳定区间。"}</p>', unsafe_allow_html=True)
@@ -392,7 +387,6 @@ else:
                 )
                 st.plotly_chart(fig_le, use_container_width=True)
 
-  
     elif "Phase 6" in analysis_mode or "阶段 6" in analysis_mode:
         st.markdown(f'<p class="main-title">{"⚡ Phase 6: Quantum Error Correction (QEC) Overhead" if not is_cn else "⚡ 阶段 6：表面码量子纠错开销与容错阈值估计"}</p>', unsafe_allow_html=True)
         st.markdown(f'<p class="sub-title">{"Estimating physical-to-logical qubit overhead for fault-tolerant continuous-variable quantum finance." if not is_cn else "评估容错量子金融计算所需的表面码（Surface Code）物理量子比特开销与容错阈值。"}</p>', unsafe_allow_html=True)
@@ -436,7 +430,6 @@ else:
             )
             st.plotly_chart(fig_qec, use_container_width=True)
 
-    
     elif "Advanced" in analysis_mode or "高级" in analysis_mode:
         st.markdown(f'<p class="main-title">{"📐 Advanced: Manifold Pullback & PPO Dynamics" if not is_cn else "📐 高级：微分几何流形平坦化与 PPO 策略动力学"}</p>', unsafe_allow_html=True)
         st.markdown(f'<p class="sub-title">{"Global reinforcement learning optimization trajectories and Pullback tangent manifold projections." if not is_cn else "深度强化学习 PPO 全局策略收敛轨迹及状态依赖流形的 Pullback 平坦化投影。"}</p>', unsafe_allow_html=True)
@@ -493,7 +486,6 @@ else:
             )
             st.plotly_chart(fig_ppo, use_container_width=True)
 
-   
     else:
         st.markdown(f'<p class="main-title">{"📚 Academic Theory & Rigorous Foundations" if not is_cn else "📚 学术理论与核心数学推导看板"}</p>', unsafe_allow_html=True)
         st.markdown(f'<p class="sub-title">{"Rigorous mathematical formulations backing the CV-VQA and error-corrected financial framework." if not is_cn else "支撑本系统连续变量变分量子定价与容错金融计算的严格数学推导与算子理论基础。"}</p>', unsafe_allow_html=True)
@@ -522,8 +514,9 @@ else:
         st.latex(r"\frac{\partial \hat{\rho}}{\partial t} = -i \left[ \hat{H}_{\text{eff}}, \hat{\rho} \right] + \sum_k \left( \hat{L}_k \hat{\rho} \hat{L}_k^\dagger - \frac{1}{2} \{ \hat{L}_k^\dagger \hat{L}_k, \hat{\rho} \} \right)")
         st.markdown("</div>", unsafe_allow_html=True)
 
-
 st.markdown("---")
 st.markdown("<p style='text-align: center; color: #9ca3af;'>CV-VQA Quantum Pricing Engine Ultimate Suite • Powered by PennyLane, Qiskit & Streamlit</p>", unsafe_allow_html=True)
+
+
 
 
