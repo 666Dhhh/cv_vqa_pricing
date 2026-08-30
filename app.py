@@ -26,6 +26,14 @@ st.markdown("""
     color: #f3f4f6 !important; 
 }
 
+
+[data-testid="stRadio"] label p, 
+[data-testid="stSlider"] label p,
+[data-testid="stRadio"] span,
+[data-testid="stSlider"] span {
+    color: #e6ebf5 !important; 
+}
+
     .cover-title {
         font-size: 3.5rem;
         font-weight: 900;
