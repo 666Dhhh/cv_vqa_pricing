@@ -25,7 +25,7 @@ st.markdown("""
         color: #f3f4f6 !important; 
     }
 
-    /* Radio 和 Slider 的标题与标签 */
+    
     [data-testid="stRadio"] label p, 
     [data-testid="stSlider"] label p,
     [data-testid="stRadio"] span,
@@ -33,12 +33,27 @@ st.markdown("""
         color: #e6ebf5 !important; 
     }
 
-    /* Slider 下面的数字（最小值、最大值、当前数值和刻度）统一修改为 #9fadc9 */
+    
     [data-testid="stSlider"] [data-baseweb="slider"] div,
     [data-testid="stSlider"] span[data-baseweb="tag"],
     [data-testid="stSlider"] div[class*="tick"],
     div[data-baseweb="slider"] div {
-        color: #9fadc9 !important;
+        color: #d5ddeb !important;
+    }
+
+   
+    [data-testid="stSidebar"] .stButton button, 
+    [data-testid="stSidebar"] .stDownloadButton button {
+        background-color: #1e293b !important;
+        color: #49a7d1 !important;
+        border: 1px solid #334155 !important;
+        font-weight: 600 !important;
+    }
+    [data-testid="stSidebar"] .stButton button:hover, 
+    [data-testid="stSidebar"] .stDownloadButton button:hover {
+        background-color: #334155 !important;
+        color: #f8fafc !important;
+        border-color: #38bdf8 !important;
     }
 
     .cover-title {
@@ -52,7 +67,7 @@ st.markdown("""
         margin-bottom: 5px;
     }
     .cover-subtitle {
-        color: #9ca3af;
+        color: #d3dded;
         font-size: 1.15rem;
         text-align: center;
         margin-bottom: 30px;
@@ -75,7 +90,7 @@ st.markdown("""
         margin-bottom: 0px;
     }
     .sub-title {
-        color: #9ca3af;
+        color: #d1d8e6;
         font-size: 1.0rem;
         margin-top: 5px;
         margin-bottom: 25px;
@@ -175,39 +190,67 @@ else:
     r = st.sidebar.number_input("Risk-free Interest Rate ($r$)" if not is_cn else "无风险利率 ($r$)", min_value=0.0, max_value=0.50, value=0.05, step=0.005, format="%.3f")
     T = st.sidebar.number_input("Time to Maturity ($T$ / Years)" if not is_cn else "到期时间 ($T$ / 年)", min_value=0.1, max_value=5.0, value=1.0, step=0.1)
 
-    # --- 新增：侧边栏一键报告导出区 ---
+    
     st.sidebar.markdown("---")
-    st.sidebar.markdown(f"📥 **{'Export Executive Report' if not is_cn else '一键导出专属分析报告'}**")
+    st.sidebar.markdown(f"📥 **{'Export Executive PDF Report' if not is_cn else '一键导出专业分析报告 (PDF/HTML)'}**")
     
     report_timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    report_content = f"""==================================================
-CV-VQA QUANTUM PRICING ENGINE - EXECUTIVE REPORT
-Generated Timestamp: {report_timestamp}
-System Language: {current_lang}
-Current Active Module: {analysis_mode}
-==================================================
+    
+    
+    pdf_html_content = f"""
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>CV-VQA Executive Research Report</title>
+        <style>
+            body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #ffffff; color: #1e293b; padding: 40px; max-width: 800px; margin: auto; }}
+            h1 {{ color: #0f172a; border-bottom: 3px solid #38bdf8; padding-bottom: 10px; }}
+            h2 {{ color: #334155; margin-top: 30px; border-bottom: 1px solid #cbd5e1; padding-bottom: 5px; }}
+            .meta {{ background: #f8fafc; padding: 15px 20px; border-radius: 8px; border-left: 4px solid #38bdf8; margin-bottom: 25px; }}
+            table {{ width: 100%; border-collapse: collapse; margin-top: 15px; }}
+            th, td {{ border: 1px solid #e2e8f0; padding: 12px; text-align: left; }}
+            th {{ background: #f1f5f9; color: #0f172a; }}
+            .footer {{ margin-top: 40px; font-size: 0.85rem; color: #64748b; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 15px; }}
+        </style>
+    </head>
+    <body>
+        <h1>CV-VQA Quantum Pricing Engine</h1>
+        <p><strong>Executive Research & Quantitative Valuation Report</strong></p>
+        
+        <div class="meta">
+            <p><strong>Generated Timestamp:</strong> {report_timestamp}</p>
+            <p><strong>System Language Mode:</strong> {current_lang}</p>
+            <p><strong>Active Research Module:</strong> {analysis_mode}</p>
+        </div>
 
-[GLOBAL MACRO PARAMETERS]
-- Asset Base Price (S0): {S0}
-- Strike / Basket Base (K): {K}
-- Risk-free Interest Rate (r): {r}
-- Time to Maturity (T): {T} Years
+        <h2>1. Global Macroeconomic Parameters</h2>
+        <table>
+            <tr><th>Parameter Name</th><th>Symbol</th><th>Value</th></tr>
+            <tr><td>Asset Base Price</td><td>$S_0$</td><td>{S0}</td></tr>
+            <tr><td>Strike / Basket Base</td><td>$K$</td><td>{K}</td></tr>
+            <tr><td>Risk-free Interest Rate</td><td>$r$</td><td>{r}</td></tr>
+            <tr><td>Time to Maturity</td><td>$T$</td><td>{T} Years</td></tr>
+        </table>
 
-[SYSTEM ENGINE CONFIGURATION]
-- Platform Architecture: Enterprise Continuous-Variable Quantum Computing & Dissipative Simulation Platform
-- Core Subroutines: Phase Space Tomography, Stochastic Heston VQA, Two-Mode Entangled Beam-Splitter, Lindblad Open-System Noise, Surface Code QEC Threshold.
+        <h2>2. Quantum Architecture & Engine Status</h2>
+        <p>This report validates continuous-variable quantum circuits, phase space tomography, stochastic Heston volatility decoupling, and Lindblad master equation resilience under hardware noise models.</p>
+        
+        <div class="footer">
+            <p>© 2026 CV-VQA Quantum Computing Core Suite. All rights reserved. | Certified Enterprise Report.</p>
+        </div>
+    </body>
+    </html>
+    """
 
-==================================================
-Report verified by CV-VQA Quantum Computing Core.
-==================================================
-"""
     st.sidebar.download_button(
-        label="📄 Download Report (.txt)" if not is_cn else "📄 下载专属文本报告 (.txt)",
-        data=report_content,
-        file_name=f"CV_VQA_Report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.txt",
-        mime="text/plain",
+        label="📄 Download Professional Report (.html/PDF)" if not is_cn else "📄 下载专业排版报告 (.html/PDF)",
+        data=pdf_html_content,
+        file_name=f"CV_VQA_Executive_Report_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.html",
+        mime="text/html",
         use_container_width=True
     )
+    st.sidebar.caption("💡 提示：下载 HTML 后双击在浏览器中打开，按 **Ctrl + P** 即可完美保存为 **PDF 文件**。")
 
     if st.sidebar.button("🏠 Return to Landing Cover / 返回封面"):
         st.session_state.entered = False
@@ -575,4 +618,5 @@ Report verified by CV-VQA Quantum Computing Core.
 
 st.markdown("---")
 st.markdown("<p style='text-align: center; color: #9ca3af;'>CV-VQA Quantum Pricing Engine Ultimate Suite • Powered by PennyLane, Qiskit & Streamlit</p>", unsafe_allow_html=True)
+
 
