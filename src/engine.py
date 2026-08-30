@@ -1,11 +1,11 @@
-﻿import numpy as np
+import numpy as np
 from scipy.stats import norm
 import pennylane as qml
 from pennylane import numpy as pnp
 from src.circuits import CVOptionCircuit
 
 class QuantumPricingEngine:
-    """CV-VQA 变分量子定价主引擎"""
+    
     
     def __init__(self, config: dict):
         self.cfg = config
@@ -29,8 +29,11 @@ class QuantumPricingEngine:
             q_mean = self.circuit_model._qnode(p, loss_rate) / 2.0
             return (q_mean - target_log_mean) ** 2
 
+        
+        loss_history = []
         for _ in range(self.cfg['quantum']['max_epochs']):
-            params, _ = opt.step_and_cost(cost_fn, params)
+            params, loss_val = opt.step_and_cost(cost_fn, params)
+            loss_history.append(float(loss_val))
 
         opt_log_mean = self.circuit_model.evaluate(params, loss_rate)
         
@@ -46,5 +49,19 @@ class QuantumPricingEngine:
             "vqa_price": vqa_price,
             "bs_price": bs_price,
             "relative_error_pct": rel_error,
-            "optimized_log_mean": opt_log_mean
+            "optimized_log_mean": opt_log_mean,
+            "loss_history": loss_history  
         }
+
+    def run_noise_sweep(self, loss_rates: list) -> list:
+        
+        results = []
+        for lr in loss_rates:
+            res = self.train_and_price(loss_rate=lr)
+            results.append({
+                "loss_rate_pct": int(lr * 100),
+                "vqa_price": res["vqa_price"],
+                "relative_error_pct": res["relative_error_pct"]
+            })
+        return results
+
